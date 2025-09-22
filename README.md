@@ -12,7 +12,7 @@ A retro-styled, pixel-perfect blog platform built with Django, designed for shar
 - **Category System**: Organize posts by topics
 - **Image Support**: Featured images for blog posts
 - **View Counter**: Track post popularity
-- **Search Functionality**: Find posts by title and content
+  
 
 ## Tech Stack
 
