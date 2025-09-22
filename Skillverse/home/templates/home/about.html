@@ -1,0 +1,623 @@
+{% extends 'home\base.html' %}
+
+{% block title %}About - Chitransh Ludhiyani | Skill Verse{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* About Hero Section */
+    .about-hero {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        margin-bottom: 3rem;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 15px,
+            rgba(255,255,255,0.02) 15px,
+            rgba(255,255,255,0.02) 30px
+        );
+        animation: slide 15s linear infinite;
+    }
+
+    .about-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2.5rem;
+        color: var(--text-light);
+        text-shadow: 4px 4px 0px var(--primary-color);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .about-subtitle {
+        font-size: 1.1rem;
+        color: var(--light-bg);
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Profile Section */
+    .profile-section {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+        align-items: start;
+    }
+
+    .profile-image-container {
+        display: flex;
+        justify-content: center;
+        position: relative;
+    }
+
+    .profile-image {
+        width: 280px;
+        height: 280px;
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1rem;
+        color: var(--text-light);
+        text-shadow: 2px 2px 0px var(--dark-bg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-image::before {
+        content: '👨‍💻';
+        font-size: 8rem;
+        position: absolute;
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    .profile-content {
+        background: rgba(255, 255, 255, 0.95);
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        padding: 2rem;
+        position: relative;
+    }
+
+    .profile-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--primary-color);
+    }
+
+    .profile-intro {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+    }
+
+    .highlight-text {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    /* Stats Section */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .stat-card {
+        background: var(--dark-bg);
+        color: var(--text-light);
+        padding: 2rem 1.5rem;
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s;
+    }
+
+    .stat-card:hover::before {
+        left: 100%;
+    }
+
+    .stat-number {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 2rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Info Sections */
+    .info-sections {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .info-card {
+        background: rgba(255, 255, 255, 0.95);
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        padding: 2rem;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--accent-color);
+    }
+
+    .info-card h3 {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1.2rem;
+        color: var(--dark-bg);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .info-card .icon {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .info-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .info-list li {
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+        position: relative;
+        color: var(--text-dark);
+        line-height: 1.6;
+    }
+
+    .info-list li::before {
+        content: '▶';
+        position: absolute;
+        left: 0;
+        color: var(--secondary-color);
+        font-size: 0.8rem;
+    }
+
+    .info-list .skill-name {
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .info-list .date-range {
+        font-weight: bold;
+        color: var(--accent-color);
+    }
+
+    /* Contact CTA Section */
+    .contact-cta {
+        background: var(--dark-bg);
+        color: var(--text-light);
+        padding: 3rem 2rem;
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        text-align: center;
+        margin: 3rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .contact-cta::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .cta-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-text {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-button {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.9rem;
+        background: var(--success-color);
+        color: var(--text-dark);
+        border: var(--pixel-border);
+        padding: 1rem 2rem;
+        box-shadow: var(--pixel-shadow);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .cta-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+        background: var(--warning-color);
+        color: var(--text-dark);
+        text-decoration: none;
+    }
+
+    .cta-button.secondary {
+        background: var(--accent-color);
+        color: var(--text-light);
+    }
+
+    .cta-button.secondary:hover {
+        background: var(--primary-color);
+        color: var(--text-light);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+        .profile-section {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .profile-image {
+            width: 220px;
+            height: 220px;
+        }
+        
+        .info-sections {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .about-title {
+            font-size: 2rem;
+        }
+        
+        .profile-image {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .profile-image::before {
+            font-size: 6rem;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .about-title {
+            font-size: 1.5rem;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .main-content {
+            padding: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- About Hero Section -->
+<section class="about-hero">
+    <h1 class="about-title">ABOUT THE AUTHOR</h1>
+    <p class="about-subtitle">Meet the person behind Skill Verse - your guide to the coding universe!</p>
+</section>
+
+<!-- Profile Section -->
+<section class="profile-section">
+    <div class="profile-image-container">
+        <div class="profile-image">
+            <span>CHITRANSH</span>
+        </div>
+    </div>
+    
+    <div class="profile-content">
+        <p class="profile-intro">
+            Hi there! I'm <span class="highlight-text">Chitransh Ludhiyani</span>, a passionate software developer and the creator of Skill Verse. 
+            Currently pursuing my <span class="highlight-text">B.Tech in Computer Science & Engineering</span> at Mahakal Institute of Technology (2021–2025), 
+            I specialize in <span class="highlight-text">Python programming, Django web development, and database management</span>.
+        </p>
+        
+        <p class="profile-intro">
+            Through this blog, I share my journey in the tech world, from building <span class="highlight-text">face recognition systems</span> 
+            to creating <span class="highlight-text">AI-powered chatbots</span>. My goal is to help fellow developers level up their skills 
+            with practical tutorials, project insights, and coding adventures!
+        </p>
+        
+        <p class="profile-intro">
+            When I'm not coding, you'll find me playing <span class="highlight-text">badminton</span> or solving puzzles. 
+            I believe in continuous learning and sharing knowledge with the community.
+        </p>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">4+</div>
+        <div class="stat-label">Years of Study</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">Projects Built</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">6+</div>
+        <div class="stat-label">Tech Skills</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">1+</div>
+        <div class="stat-label">Internship</div>
+    </div>
+</section>
+
+<!-- Info Sections -->
+<section class="info-sections">
+    <!-- Skills Card -->
+    <div class="info-card">
+        <h3><span class="icon">🚀</span> Technical Skills</h3>
+        <ul class="info-list">
+            <li><span class="skill-name">Python:</span> Backend Development, Automation, AI Projects, Django</li>
+            <li><span class="skill-name">Web Development:</span> HTML, CSS, JavaScript - Building responsive websites</li>
+            <li><span class="skill-name">Database:</span> MySQL - Data storage, retrieval, and optimization</li>
+            <li><span class="skill-name">Version Control:</span> Git & GitHub - Team collaboration and code tracking</li>
+            <li><span class="skill-name">Frameworks:</span> Django for full-stack web applications</li>
+        </ul>
+    </div>
+    
+    <!-- Experience Card -->
+    <div class="info-card">
+        <h3><span class="icon">💼</span> Experience</h3>
+        <ul class="info-list">
+            <li>
+                <span class="date-range">July 2024 - Aug 2024:</span><br>
+                <strong>Python Developer Intern</strong> at Code Hub, Ujjain<br>
+                • Developed customer chatbot with order management<br>
+                • Implemented email and phone verification systems<br>
+                • Optimized chatbot responses for better UX
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Education Card -->
+    <div class="info-card">
+        <h3><span class="icon">🎓</span> Education</h3>
+        <ul class="info-list">
+            <li>
+                <span class="date-range">2021 - 2025:</span><br>
+                <strong>B.Tech in Computer Science & Engineering</strong><br>
+                Mahakal Institute of Technology, Ujjain
+            </li>
+            <li>
+                <span class="date-range">2021:</span><br>
+                <strong>12th Grade</strong> - Cambridge Public School (61.5%)
+            </li>
+            <li>
+                <span class="date-range">2019:</span><br>
+                <strong>10th Grade</strong> - Pushpa Convent Higher Sec School (61.5%)
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Projects Card -->
+    <div class="info-card">
+        <h3><span class="icon">🛠️</span> Featured Projects</h3>
+        <ul class="info-list">
+            <li>
+                <span class="skill-name">Face Detection Attendance System:</span><br>
+                AI-based real-time attendance tracking with facial recognition and admin alerts
+            </li>
+            <li>
+                <span class="skill-name">Customer Support Chatbot:</span><br>
+                Automated support assistant with order verification and conversational interface
+            </li>
+            <li>
+                <span class="skill-name">Cold Email Generator:</span><br>
+                Personalized email automation tool using LLMs and OpenRouter API
+            </li>
+            <li>
+                <span class="skill-name">Qubit AI (EdTech):</span><br>
+                Educational platform for teaching robotics & AI through interactive modules
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="contact-cta">
+    <h2 class="cta-title">LET'S CONNECT!</h2>
+    <p class="cta-text">
+        Have questions about my tutorials? Want to collaborate on a project? 
+        Or just want to say hi? I'd love to hear from you!
+    </p>
+    
+    <div class="cta-buttons">
+        <a href="mailto:chitranshludhiyani103@gmail.com" class="cta-button">Email Me</a>
+        <a href="https://github.com/ChitranshLudhiyani1" class="cta-button secondary" target="_blank">GitHub</a>
+        <a href="www.linkedin.com/in/chitranshludhiyani" class="cta-button secondary" target="_blank">LinkedIn</a>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Add some interactive animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate stats on scroll
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        const animateStats = () => {
+            statNumbers.forEach(stat => {
+                const rect = stat.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    const finalNumber = stat.textContent;
+                    const number = parseInt(finalNumber);
+                    let current = 0;
+                    const increment = number / 20;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= number) {
+                            stat.textContent = finalNumber;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + (finalNumber.includes('+') ? '+' : '');
+                        }
+                    }, 50);
+                }
+            });
+        };
+
+        // Run animation on scroll
+        window.addEventListener('scroll', animateStats);
+        animateStats(); // Run once on load
+
+        // Add hover effects to info cards
+        const infoCards = document.querySelectorAll('.info-card');
+        infoCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translate(-4px, -4px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translate(-2px, -2px) scale(1)';
+            });
+        });
+
+        // Add ripple effect to CTA buttons
+        const ctaButtons = document.querySelectorAll('.cta-button');
+        ctaButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255,255,255,0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = e.offsetX - 10 + 'px';
+                ripple.style.top = e.offsetY - 10 + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                
+                this.style.position = 'relative';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    });
+</script>
+{% endblock %}

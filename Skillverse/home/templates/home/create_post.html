@@ -1,0 +1,36 @@
+{% extends 'home/base.html' %}
+{% block title %}Create Post - Skill Verse{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Write a New Blog</h2>
+<form method="POST" enctype="multipart/form-data" class="pixel-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="pixel-button">Publish</button>
+</form>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.pixel-form {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(255,255,255,0.95);
+    padding: 2rem;
+    border: var(--pixel-border);
+    box-shadow: var(--pixel-shadow);
+}
+.pixel-form textarea {
+    width: 100%;
+    height: 150px;
+    border: var(--pixel-border);
+    padding: 0.5rem;
+    font-family: 'Orbitron', monospace;
+}
+.pixel-form input, .pixel-form select {
+    width: 100%;
+    padding: 0.5rem;
+    border: var(--pixel-border);
+}
+</style>
+{% endblock %}

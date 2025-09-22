@@ -1,0 +1,205 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}{{ post.title }} - Skill Verse{% endblock %}
+
+{% block extra_css %}
+<style>
+    .blog-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.98);
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .blog-header {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .blog-header img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .blog-meta-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        color: white;
+        padding: 2rem;
+    }
+
+    .blog-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 1.8rem;
+        line-height: 1.4;
+        color: var(--text-light);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        margin: 0;
+    }
+
+    .blog-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .blog-category {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.7rem;
+        border: 1px solid white;
+        text-transform: uppercase;
+    }
+
+    .blog-content {
+        padding: 3rem;
+        line-height: 2;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        font-family: 'Orbitron', monospace;
+    }
+
+    .blog-content p {
+        margin-bottom: 1.5rem;
+        text-align: justify;
+    }
+
+    .blog-content h1, .blog-content h2, .blog-content h3 {
+        font-family: 'Press Start 2P', monospace;
+        color: var(--primary-color);
+        margin: 2rem 0 1rem 0;
+        line-height: 1.4;
+    }
+
+    .blog-content h1 { font-size: 1.4rem; }
+    .blog-content h2 { font-size: 1.2rem; }
+    .blog-content h3 { font-size: 1rem; }
+
+    .blog-content ul, .blog-content ol {
+        margin: 1.5rem 0;
+        padding-left: 2rem;
+    }
+
+    .blog-content li {
+        margin-bottom: 0.8rem;
+    }
+
+    .blog-content code {
+        background: var(--dark-bg);
+        color: var(--secondary-color);
+        padding: 0.2rem 0.5rem;
+        font-family: 'Courier New', monospace;
+        border-radius: 3px;
+    }
+
+    .blog-content pre {
+        background: var(--dark-bg);
+        color: var(--text-light);
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: var(--pixel-border);
+        margin: 1.5rem 0;
+    }
+
+    .blog-actions {
+        padding: 2rem 3rem;
+        border-top: 2px dashed var(--light-bg);
+        text-align: center;
+        background: rgba(0,0,0,0.02);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .blog-container {
+            margin: 1rem;
+        }
+        
+        .blog-title {
+            font-size: 1.2rem;
+        }
+        
+        .blog-content {
+            padding: 2rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        .blog-actions {
+            padding: 2rem 1.5rem;
+        }
+        
+        .blog-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<article class="blog-container">
+    <!-- Blog Header with Image -->
+    <div class="blog-header">
+        {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+        {% else %}
+            <div style="text-align: center; color: white; font-family: 'Press Start 2P', monospace;">
+                📚 SKILL VERSE BLOG
+            </div>
+        {% endif %}
+        
+        <!-- Meta Information Overlay -->
+        <div class="blog-meta-overlay">
+            <h1 class="blog-title">{{ post.title }}</h1>
+            <div class="blog-meta">
+                <span class="blog-category">{{ post.category }}</span>
+                <span>👤 {{ post.author.username }}</span>
+                <span>📅 {{ post.created_at|date:"M d, Y" }}</span>
+                <span>👁️ {{ post.views }} views</span>
+                <span>⏱️ {{ post.content|wordcount|floatformat:"0" }} words</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Content -->
+    <div class="blog-content">
+        {{ post.content|linebreaks }}
+    </div>
+
+    
+    {% if user == post.author %}
+    <div class="blog-actions">
+        <h3 style="font-family: 'Press Start 2P', monospace; color: var(--dark-bg); margin-bottom: 1.5rem;">
+            ⚙️ MANAGE YOUR POST
+        </h3>
+       <a href="{% url 'home:delete' post.id %}" class="pixel-button" style="background: var(--accent-color);">Delete</a>
+       
+    </div>
+    {% endif %}
+</article>
+
+<!-- Back to Explore -->
+<div style="text-align: center; margin: 2rem 0;">
+    <a href="{% url 'home:explore' %}" class="pixel-button" style="background: var(--accent-color);">
+        ← Back to All Posts
+    </a>
+</div>
+{% endblock %}

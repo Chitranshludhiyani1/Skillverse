@@ -1,0 +1,38 @@
+
+
+{% extends 'home/base.html' %}
+
+{% load static %}
+{% block title %}Explore Blogs - Skill Verse{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Explore Blogs</h2>
+<div class="posts-grid">
+    {% for post in posts %}
+    <article class="post-card">
+        <div class="post-image">
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+            📚 FEATURED IMAGE
+            {% endif %}
+        </div>
+        <h3 class="post-title">{{ post.title }}</h3>
+        <div class="post-meta">
+            <span class="post-category">{{ post.category }}</span>
+            <span>👤 {{ post.author.username }}</span>
+            <span>📅 {{ post.created_at|date:"M d, Y" }}</span>
+            <span>👁️ {{ post.views }} views</span>
+        </div>
+        <p class="post-excerpt">{{ post.excerpt }}</p>
+        <a href="{% url 'home:read_post' post.id %}" class="read-more">READ MORE</a>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h3 class="empty-title">No Posts Yet!</h3>
+        <p class="empty-message">Check back soon for awesome content!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

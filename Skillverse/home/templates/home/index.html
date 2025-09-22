@@ -1,0 +1,254 @@
+{% extends 'home\base.html' %}
+
+{% block title %}Home - Skill Verse{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: var(--pixel-border);
+        box-shadow: var(--pixel-shadow);
+        margin-bottom: 3rem;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,0.03) 10px,
+            rgba(255,255,255,0.03) 20px
+        );
+        animation: slide 10s linear infinite;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(-50px) translateY(-50px); }
+        100% { transform: translateX(0px) translateY(0px); }
+    }
+
+    .hero-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 3rem;
+        color: var(--text-light);
+        text-shadow: 4px 4px 0px var(--primary-color);
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        color: var(--light-bg);
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero .pixel-button {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Blog Feed Section */
+    .blog-feed {
+        margin-top: 3rem;
+    }
+
+    .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    /* Responsive Design for Hero */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .hero {
+            padding: 2rem 1rem;
+        }
+        
+        .posts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 1.5rem;
+        }
+        
+        .pixel-button {
+            font-size: 0.8rem;
+            padding: 0.8rem 1.5rem;
+        }
+    }
+
+    /* Hero buttons styling */
+.hero .pixel-button {
+    margin: 0.5rem;
+    min-width: 150px;
+}
+
+@media (max-width: 768px) {
+    .hero div {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero .pixel-button {
+        width: 200px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1 class="hero-title">WELCOME TO SKILL VERSE</h1>
+    <p class="hero-subtitle">Level up your skills with our pixel-perfect blog posts!</p>
+    
+    <!-- Different buttons for logged in vs not logged in users -->
+    <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+        {% if user.is_authenticated %}
+            <!-- Logged in user ke liye -->
+            <a href="{% url 'home:explore' %}" class="pixel-button">Start Reading</a>
+            <a href="{% url 'home:create_post' %}" class="pixel-button" style="background: var(--success-color);">Write a Blog</a>
+        {% else %}
+            <!-- Not logged in user ke liye -->
+            <a href="{% url 'home:explore' %}" class="pixel-button">Start Reading</a>
+            <a href="{% url 'home:signup' %}" class="pixel-button" style="background: var(--success-color);">Join Now</a>
+            <a href="{% url 'home:login' %}" class="pixel-button" style="background: var(--secondary-color);">Login to Write</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Blog Feed -->
+<section class="blog-feed">
+    <h2 class="section-title">Latest Posts</h2>
+    <div class="posts-grid">
+        {% for post in posts %}
+        <article class="post-card">
+            <div class="post-image">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" style="width:100%;height:100%;object-fit:cover;">
+                {% else %}
+                📚 FEATURED IMAGE
+                {% endif %}
+            </div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <div class="post-meta">
+                <span class="post-category">{{ post.category|upper }}</span>
+                <span>👤 {{ post.author.username }}</span>
+                <span>📅 {{ post.created_at|date:"M d, Y" }}</span>
+                <span>👁️ {{ post.views }} views</span>
+            </div>
+            <p class="post-excerpt">{{ post.excerpt }}</p>
+            <a href="{% url 'home:read_post' post.id %}" class="read-more">READ MORE</a>
+            {% if user == post.author %}
+            
+                </h3>
+                <a href="{% url 'home:delete' post.id %}"class="read-more">Delete</a>
+            </div>
+            {% endif %}
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <h3 class="empty-title">No Posts Yet!</h3>
+            <p class="empty-message">Be the first to create a post!</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+    <!-- Empty State (Show this when no posts exist) 
+         Uncomment this section and comment out the posts-grid above when you want to show empty state -->
+    <!-- 
+    <div class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h3 class="empty-title">No Posts Yet!</h3>
+        <p class="empty-message">Check back soon for awesome content!</p>
+    </div>
+    -->
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Add some interactive functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click animations to buttons
+        const buttons = document.querySelectorAll('.pixel-button, .read-more');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create a ripple effect
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255,255,255,0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = e.offsetX - 10 + 'px';
+                ripple.style.top = e.offsetY - 10 + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                
+                this.style.position = 'relative';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add hover sound effect (visual feedback)
+        const cards = document.querySelectorAll('.post-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.filter = 'brightness(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.filter = 'brightness(1)';
+            });
+        });
+    });
+
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

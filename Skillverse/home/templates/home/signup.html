@@ -1,0 +1,38 @@
+{% extends 'home/base.html' %}
+{% block title %}Sign Up - Skill Verse{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Create an Account</h2>
+<form method="POST" class="pixel-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="pixel-button">Sign Up</button>
+    
+    <p>Already have an account? <a href="{% url 'home:login' %}">Log in</a></p>
+</form>
+
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.pixel-form {
+    max-width: 500px;
+    margin: auto;
+    background: rgba(255,255,255,0.9);
+    padding: 2rem;
+    border: var(--pixel-border);
+    box-shadow: var(--pixel-shadow);
+}
+.pixel-form p {
+    margin-bottom: 1rem;
+}
+.pixel-form input {
+    width: 100%;
+    padding: 0.5rem;
+    border: var(--pixel-border);
+    font-family: 'Press Start 2P', monospace;
+}
+</style>
+
+{% endblock %}
